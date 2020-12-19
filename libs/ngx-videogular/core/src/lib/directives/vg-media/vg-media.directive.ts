@@ -4,7 +4,7 @@ import {
   OnDestroy,
   Input,
   ChangeDetectorRef,
-} from '@angular/core';
+} from "@angular/core";
 import {
   Observable,
   Subscription,
@@ -12,24 +12,24 @@ import {
   fromEvent,
   timer,
   combineLatest,
-} from 'rxjs';
-import { map } from 'rxjs/operators';
+} from "rxjs";
+import { map } from "rxjs/operators";
 import {
   IPlayable,
   IMediaSubscriptions,
-} from '../../interfaces/vg-media-api.interface';
-import { IMediaElement } from '../../interfaces/i-media-element.interface';
-import { VgApiService } from '../../services/vg-api/vg-api.service';
-import { VgStates } from '../../services/states/vg-states.service';
-import { VgEvents } from '../../services/events/vg-events.service';
+} from "../../interfaces/vg-media-api.interface";
+import { IMediaElement } from "../../interfaces/i-media-element.interface";
+import { VgApiService } from "../../services/vg-api/vg-api.service";
+import { VgStates } from "../../services/states/vg-states.service";
+import { VgEvents } from "../../services/events/vg-events.service";
 
 @Directive({
-  selector: '[vgMedia]',
+  selector: "[vgMedia]",
 })
 export class VgMediaDirective implements OnInit, OnDestroy, IPlayable {
   elem: any;
 
-  @Input() vgMedia: IMediaElement;
+  @Input() vgMedia: any;
   @Input() vgMaster: boolean;
 
   state: string = VgStates.VG_PAUSED;
@@ -234,20 +234,20 @@ export class VgMediaDirective implements OnInit, OnDestroy, IPlayable {
     for (let i = 0, l = mutations.length; i < l; i++) {
       const mut: MutationRecord = mutations[i];
 
-      if (mut.type === 'attributes' && mut.attributeName === 'src') {
+      if (mut.type === "attributes" && mut.attributeName === "src") {
         // Only load src file if it's not a blob (for DASH / HLS sources)
         if (
           (mut.target as any).src &&
           (mut.target as any).src.length > 0 &&
-          (mut.target as any).src.indexOf('blob:') < 0
+          (mut.target as any).src.indexOf("blob:") < 0
         ) {
           this.loadMedia();
           break;
         }
       } else if (
-        mut.type === 'childList' &&
+        mut.type === "childList" &&
         mut.removedNodes.length &&
-        mut.removedNodes[0].nodeName.toLowerCase() === 'source'
+        mut.removedNodes[0].nodeName.toLowerCase() === "source"
       ) {
         this.loadMedia();
         break;
@@ -524,7 +524,7 @@ export class VgMediaDirective implements OnInit, OnDestroy, IPlayable {
     type: string,
     label?: string,
     language?: string,
-    mode?: 'disabled' | 'hidden' | 'showing'
+    mode?: "disabled" | "hidden" | "showing"
   ): TextTrack {
     const newTrack: TextTrack = this.vgMedia.addTextTrack(
       type,
@@ -539,7 +539,7 @@ export class VgMediaDirective implements OnInit, OnDestroy, IPlayable {
   }
 
   ngOnDestroy() {
-    this.vgMedia.src = '';
+    this.vgMedia.src = "";
     this.mutationObs.unsubscribe();
     this.canPlayObs.unsubscribe();
     this.canPlayThroughObs.unsubscribe();
